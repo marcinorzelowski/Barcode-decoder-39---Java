@@ -22,18 +22,36 @@ public class Main {
                 case 1:
                     System.out.println("Give the name of the file to encode.");
                     nameOfFile = reader.nextLine();
-                    BufferedImage img = null;
+                    BufferedImage imgRead = null;
                     try
                     {
-                        img = ImageIO.read(new File(nameOfFile));
+                        imgRead = ImageIO.read(new File(nameOfFile));
+
                     }catch (IOException e)
                     {
                         System.out.println("Error of file.");
                     }
-                    ImageBMP photo = new ImageBMP(img);
+                    ImageBMP photo = new ImageBMP(imgRead);
                     System.out.println(photo.decode());
                     break;
                 case 2:
+//                    System.out.println("Give the name of the file you want to create.");
+//                    nameOfFile = reader.nextLine();
+                    String textToEncode = "HEJKA";
+                    int barWidth = 4;
+                    BufferedImage imgWrite = new BufferedImage(600,50,BufferedImage.TYPE_INT_RGB);
+                    ImageBMP photoWrite = new ImageBMP(imgWrite, textToEncode, barWidth);
+
+                    try
+                    {
+                        File f = new File("output.bmp");
+                        ImageIO.write(photoWrite.returnPhoto(),"bmp",f);
+                    }catch (IOException e)
+                    {
+                        System.out.println("Error of file.");
+                    }
+
+
                     break;
                 case 0:
                     System.out.println("Goodbye!");

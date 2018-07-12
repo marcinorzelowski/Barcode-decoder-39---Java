@@ -27,11 +27,22 @@ public class ImageBMP
     public ImageBMP(BufferedImage img)
     {
         this.imageBuffer = img;
+
+            this.width = img.getWidth();
+            this.height = img.getHeight();
+            this.checkedLine = 25;
+            this.barWidth = setBarWidth();
+            this.actualPositionX = getStartingPosition();
+
+    }
+
+    public ImageBMP(BufferedImage img, String textToEncode, int barWidth)
+    {
+        this.imageBuffer = img;
+        this.barWidth = barWidth;
         this.width = img.getWidth();
         this.height = img.getHeight();
-        this.checkedLine = 25;
-        this.barWidth = setBarWidth();
-        this.actualPositionX = getStartingPosition();
+        toWhite();
     }
 
     private int getCheckedLine() {
@@ -146,4 +157,39 @@ public class ImageBMP
         return encodedText;
     }
 
+    private void toWhite()
+    {
+        Color MyWhite = new Color(255,255,255);
+        for(int y = 0; y < getHeight(); y++)
+        {
+            for(int x = 0; x < getWidth(); x++){
+                imageBuffer.setRGB(x, y, MyWhite.getRGB());
+            }
+        }
+    }
+    public BufferedImage returnPhoto()
+    {
+        paintBlackBar(true, 15);
+        return imageBuffer;
+    }
+
+    private void paintBlackBar(boolean ifFat, int xCoordinate)// if fat tells size of a bar (small of big)
+    {
+        Color myBlack = new Color(1,1,1);
+        int widthOfColoredBar;
+        if(ifFat==true)
+            widthOfColoredBar = 2*getBarWidth();
+        else
+            widthOfColoredBar = getBarWidth();
+        for(int x = 0; x < widthOfColoredBar; x++){
+            for(int y = 0; y < getHeight(); y++){
+                imageBuffer.setRGB(xCoordinate,y,myBlack.getRGB());
+        }
+            xCoordinate++;
+        }
+    }
+
+
 }
+
+
