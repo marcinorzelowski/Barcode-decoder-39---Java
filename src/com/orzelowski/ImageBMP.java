@@ -9,10 +9,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class ImageBMP
+private class ImageBMP
 {
 
     private BufferedImage imageBuffer;
+    private String text;
     private int width;
     private int height;
     private int checkedLine;
@@ -34,14 +35,17 @@ public class ImageBMP
             this.barWidth = setBarWidth();
             this.actualPositionX = getStartingPosition();
 
+
     }
 
-    public ImageBMP(BufferedImage img, String textToEncode, int barWidth)
+    private ImageBMP(BufferedImage img, String textToEncode, int barWidth)
     {
         this.imageBuffer = img;
         this.barWidth = barWidth;
         this.width = img.getWidth();
         this.height = img.getHeight();
+        this.text = textToEncode;
+        actualPositionX = 10;
         toWhite();
     }
 
@@ -53,11 +57,11 @@ public class ImageBMP
         return width;
     }
 
-    public int getHeight() {
+    private int getHeight() {
         return height;
     }
 
-    public int getBarWidth() {return barWidth; }
+    private int getBarWidth() {return barWidth; }
 
     private int getStartingPosition() //returning starting position of black bars;
     {
@@ -66,10 +70,12 @@ public class ImageBMP
         {
             if((byte)(imageBuffer.getRGB(i,getCheckedLine()))==0) {
                 position = i;
+                System.out.println(position);
                 break;
             }
 
         }
+
 
         return position;
     }
@@ -157,7 +163,7 @@ public class ImageBMP
         return encodedText;
     }
 
-    private void toWhite()
+    private void toWhite()//painting whole picture for a white color
     {
         Color MyWhite = new Color(255,255,255);
         for(int y = 0; y < getHeight(); y++)
@@ -169,7 +175,9 @@ public class ImageBMP
     }
     public BufferedImage returnPhoto()
     {
-        paintBlackBar(true, 15);
+        for(int i = 0; i < this.text.length(); i++){
+            paintSymbol(this.text.charAt(i));
+        }
         return imageBuffer;
     }
 
@@ -186,6 +194,51 @@ public class ImageBMP
                 imageBuffer.setRGB(xCoordinate,y,myBlack.getRGB());
         }
             xCoordinate++;
+        }
+    }
+
+    private int findSymbolIndex(char symbol)
+    {
+        int i = 0;
+        while(i<symbols.length)
+        {
+            if(symbol==symbols[i])
+            {
+                return i;
+            }
+            i++;
+        }
+        return 100;
+    }
+    private void paintSymbol(char symbolToEncode)
+    {
+
+        int index = findSymbolIndex(symbolToEncode);
+        if(index!=100)
+        {
+            String codeInString = Integer.toString(codeTable[index]);
+            for(int i = 0; i < codeInString.length();i++)
+            {
+                System.out.println("12");
+                char s = codeInString.charAt(i);
+                if(i%2==0)
+                {
+                    if(s=='2')
+                    {
+                        paintBlackBar(true, actualPositionX);
+                        actualPositionX = actualPositionX+(2*barWidth);
+                    }else{
+                        paintBlackBar(false,actualPositionX);
+                        actualPositionX += barWidth;
+                    }
+                }else{
+                    if(s=='2')
+                        actualPositionX+=(2*barWidth);
+                    else
+                        actualPositionX+=barWidth;
+                }
+
+            }
         }
     }
 

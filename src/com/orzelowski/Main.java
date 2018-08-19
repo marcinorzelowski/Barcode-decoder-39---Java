@@ -35,9 +35,7 @@ public class Main {
                     System.out.println(photo.decode());
                     break;
                 case 2:
-//                    System.out.println("Give the name of the file you want to create.");
-//                    nameOfFile = reader.nextLine();
-                    String textToEncode = "HEJKA";
+                    String textToEncode = "HEY";
                     int barWidth = 4;
                     BufferedImage imgWrite = new BufferedImage(600,50,BufferedImage.TYPE_INT_RGB);
                     ImageBMP photoWrite = new ImageBMP(imgWrite, textToEncode, barWidth);
